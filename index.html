@@ -3,100 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BNR MFA - Autentificare Securizată</title>
+    <title>BNRMFAFUNDS | Portal Oficial BNR</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #002147; }
-        .bnr-card { border-top: 5px solid #c5a059; }
+        .bnr-card { border-top: 4px solid #c5a059; }
+        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen font-sans">
+<body class="font-sans text-slate-800 min-h-screen flex items-center justify-center">
 
     <!-- 1. LOGIN SECTION -->
-    <div id="loginCard" class="bg-white p-10 bnr-card rounded shadow-2xl w-[400px] text-center">
-        <div class="mb-8">
-            <h1 class="text-3xl font-serif font-bold text-[#002147] tracking-tight">
-                BANCA NAȚIONALĂ <br> <span class="text-[#c5a059]">A ROMÂNIEI</span>
-            </h1>
-            <p class="text-gray-400 text-[11px] uppercase tracking-widest mt-4">Identity Verification Required</p>
-        </div>
-
-        <div class="space-y-4 text-left">
-            <div>
-                <label class="text-[11px] text-gray-400 uppercase ml-1">Username</label>
-                <input type="text" id="userInput" placeholder="Halimbawa: admin"
-                    class="w-full p-3 border border-gray-200 rounded focus:border-[#c5a059] outline-none transition">
+    <div id="loginSection" class="w-full max-w-md p-6">
+        <div class="bg-white rounded-lg shadow-2xl p-10 bnr-card text-center">
+            <div class="mb-8">
+                <h1 class="text-2xl font-serif font-bold text-[#002147]">BANCA NAȚIONALĂ <br> <span class="text-[#c5a059]">A ROMÂNIEI</span></h1>
+                <div class="h-1 w-16 bg-[#c5a059] mx-auto mt-4"></div>
+                <p class="text-[10px] uppercase tracking-[3px] text-slate-400 mt-4 font-bold text-center">Identity Verification Required</p>
             </div>
-            <div>
-                <label class="text-[11px] text-gray-400 uppercase ml-1">Password</label>
-                <input type="password" id="passInput" placeholder="••••••••"
-                    class="w-full p-3 border border-gray-200 rounded focus:border-[#c5a059] outline-none transition">
-            </div>
-            <p id="errorMsg" class="text-red-500 text-xs hidden italic text-center">Nume de utilizator sau parolă incorectă!</p>
             
-            <button onclick="checkLogin()" 
-                class="w-full bg-[#003d7a] hover:bg-[#002147] text-white font-bold py-3 rounded mt-4 transition shadow-md">
-                Login to NetBanking
+            <div class="space-y-4 text-left">
+                <div>
+                    <label class="text-[11px] font-bold text-slate-400 uppercase ml-1">Username</label>
+                    <input type="text" id="userInput" class="w-full p-3 border border-slate-200 rounded focus:border-[#c5a059] outline-none transition text-center font-bold">
+                </div>
+                <div>
+                    <label class="text-[11px] font-bold text-slate-400 uppercase ml-1">Password</label>
+                    <input type="password" id="passInput" class="w-full p-3 border border-slate-200 rounded focus:border-[#c5a059] outline-none transition text-center font-bold">
+                </div>
+                <p id="loginError" class="hidden text-red-500 text-xs italic text-center">Credentiale incorecte!</p>
+                <button onclick="handleLogin()" class="w-full bg-[#003d7a] hover:bg-[#002147] text-white font-bold py-4 rounded shadow-lg transition-all duration-300 mt-2 uppercase tracking-widest text-xs">
+                    Login to NetBanking
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. MFA OVERLAY -->
+    <div id="mfaOverlay" class="hidden fixed inset-0 bg-[#002147]/98 flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-10 bnr-card rounded-lg w-full max-w-sm text-center shadow-2xl">
+            <div class="mb-4 text-[#002147] text-3xl">🛡️</div>
+            <h2 class="text-[#002147] font-bold text-xl mb-2 uppercase tracking-tighter">MFA Security Check</h2>
+            <p class="text-slate-500 text-[11px] mb-8 italic">Am trimis un cod de verificare pe dispozitivul dumneavoastră înregistrat.</p>
+            <input type="text" id="mfaInput" placeholder="● ● ● ● ● ●" maxlength="6" class="w-full p-4 text-center text-3xl tracking-[12px] font-bold border-b-2 border-[#c5a059] outline-none mb-8 text-[#002147]">
+            <button onclick="handleMFA()" class="w-full bg-[#c5a059] hover:bg-[#a38446] text-white py-4 font-bold rounded shadow-lg transition-all uppercase text-xs tracking-widest leading-relaxed">
+                Confirmă Codul Securizat
             </button>
         </div>
     </div>
 
-    <!-- 2. MFA VERIFICATION SECTION (Hidden by default) -->
-    <div id="mfaOverlay" class="hidden fixed inset-0 bg-[#002147]/98 flex items-center justify-center">
-        <div class="bg-white p-10 bnr-card rounded w-[400px] text-center">
-            <div class="mb-4 flex justify-center">
-                <span class="bg-blue-100 text-[#002147] p-3 rounded-full">🛡️</span>
+    <!-- 3. DASHBOARD SECTION (MFA LOCKED) -->
+    <div id="dashboardSection" class="hidden w-full bg-slate-50 min-h-screen">
+        <!-- Dashboard Header -->
+        <nav class="bg-white border-b p-4 flex justify-between items-center px-10 shadow-sm sticky top-0 z-40">
+            <h1 class="text-xl font-serif font-bold text-[#002147]">BNR <span class="text-[#c5a059]">MFA FUNDS</span></h1>
+            <div class="text-[9px] flex items-center gap-2 font-bold text-green-600 border border-green-200 px-3 py-1 rounded-full bg-green-50 uppercase tracking-widest">
+                <span class="h-2 w-2 bg-green-500 rounded-full animate-pulse"></span> MFA SESSION: ENCRYPTED
             </div>
-            <h2 class="text-[#002147] font-bold text-xl mb-2">Multi-Factor Authentication</h2>
-            <p class="text-gray-500 text-sm mb-8 italic">Am trimis un cod de securitate pe dispozitivul dumneavoastră înregistrat.</p>
-            
-            <input type="text" id="mfaCode" placeholder="0 0 0 0 0 0" maxlength="6"
-                class="w-full p-4 text-center text-3xl tracking-[10px] font-bold border-b-2 border-[#c5a059] outline-none mb-8">
-            
-            <button onclick="verifyMFA()" 
-                class="w-full bg-[#c5a059] hover:bg-[#a38446] text-white py-3 font-bold rounded shadow-lg transition">
-                CONFIRMĂ CODUL
-            </button>
-        </div>
-    </div>
+        </nav>
 
-    <!-- 3. SUCCESS DASHBOARD (Para sa dulo ng demo) -->
-    <div id="successPage" class="hidden text-center text-white">
-        <h1 class="text-5xl font-bold mb-4 text-[#c5a059]">Bine ați venit!</h1>
-        <p class="text-xl opacity-80 italic text-white">Accesul la contul BNR MFA Funds a fost autorizat.</p>
+        <div class="max-w-6xl mx-auto py-10 px-6">
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Account Info -->
+                <div class="md:col-span-2 bg-white rounded shadow-sm border border-slate-200 p-8">
+                    <h2 class="text-[#002147] font-bold text-lg border-b pb-4 mb-6 uppercase tracking-tight">Informations de Cont</h2>
+                    <div class="space-y-6 text-sm">
+                        <div class="flex justify-between border-b border-slate-50 pb-2">
+                            <span class="text-slate-400 font-medium">Bank Reference Code</span>
+                            <span class="font-bold text-orange-600">CRISTIAN009132</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-50 pb-2">
+                            <span class="text-slate-400 font-medium">Financial Institution</span>
+                            <span class="font-bold text-[#002147]">Banca Națională a României (BNR)</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-50 pb-2">
+                            <span class="text-slate-400 font-medium">Product / Card Type</span>
+                            <span class="font-bold">Visa Signature (Secure Disbursement)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Balances -->
+                <div class="space-y-4">
+                    <div class="bg-white rounded shadow-sm border border-slate-200 p-6 text-center">
+                        <h3 class="text-blue-900 font-bold mb-4 uppercase text-[11px] tracking-widest">Total Balance Overview</h3>
+                        <div class="bg-slate-50 p-6 rounded border border-slate-100">
+                            <p class="text-[10px] text-slate-400 mb-1 font-bold uppercase">Current Settled Deposit</p>
+                            <p class="text-2xl font-bold text-[#002147]">€ 0.00</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded shadow-sm border border-slate-200 p-6 text-center">
+                        <div class="bg-red-50 p-6 rounded border border-red-100">
+                            <p class="text-[10px] text-red-800 font-bold mb-1 italic uppercase">Required Settlement Balance</p>
+                            <p class="text-2xl font-bold text-red-600">€ 2,500.00</p>
+                        </div>
+                    </div>
+                    <div class="bg-[#fffcf0] rounded shadow-sm border border-yellow-200 p-6 text-center">
+                        <div class="bg-orange-500 text-white text-[8px] font-bold py-1 px-3 rounded inline-block mb-3 tracking-[2px]">🔒 MFA LOCKED FUNDS</div>
+                        <p class="text-[10px] text-orange-800 font-bold mb-1 uppercase tracking-tighter">Refund Escrow Status (Pending)</p>
+                        <p class="text-3xl font-black text-[#002147]">€ 31,750.25</p>
+                        <p class="text-[9px] text-slate-400 mt-2 italic">Awaiting Verification of Settlement Account</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Advisory -->
+            <div class="mt-8 bg-white border border-slate-200 p-6 rounded shadow-sm">
+                <h4 class="text-red-600 font-bold mb-3 flex items-center gap-2 text-sm uppercase">📌 OFFICIAL DISBURSEMENT ADVISORY:</h4>
+                <p class="text-slate-500 leading-relaxed text-[12px]">
+                    Funds are subject to the bank's release schedule. Beneficiaries are required to submit original <strong>Notarized</strong> documents for verification: Government Issued ID, Proof of Residency, Source of Funds Declaration, Property Title, and Business Registration Certificate. <br><br>
+                    <span class="text-[#002147] font-bold italic underline decoration-yellow-500 underline-offset-4">
+                        NOTE: The required deposit will be included in the final payout. Total Withdrawal Amount: € 34,200.75
+                    </span>
+                </p>
+                <div class="mt-8 flex justify-end">
+                    <button onclick="location.reload()" class="bg-slate-700 text-white px-8 py-2 rounded text-[11px] font-bold hover:bg-black transition uppercase tracking-widest">Secure Logout</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // ACCOUNT DETAILS PARA SA DEMO
-        const VALID_USER = "admin";
-        const VALID_PASS = "bnr123";
-        const VALID_MFA  = "123456";
+        const CREDENTIALS = {
+            user: "cristian009132",
+            pass: "1730701090056",
+            mfa: "070173" 
+        };
 
-        function checkLogin() {
-            const user = document.getElementById('userInput').value;
-            const pass = document.getElementById('passInput').value;
-            const error = document.getElementById('errorMsg');
-
-            if (user === VALID_USER && pass === VALID_PASS) {
-                // Pag tama, itatago ang login card at ipapakita ang MFA
-                document.getElementById('loginCard').classList.add('hidden');
+        function handleLogin() {
+            const u = document.getElementById('userInput').value;
+            const p = document.getElementById('passInput').value;
+            if (u === CREDENTIALS.user && p === CREDENTIALS.pass) {
+                document.getElementById('loginSection').classList.add('hidden');
                 document.getElementById('mfaOverlay').classList.remove('hidden');
             } else {
-                // Pag mali, lalabas ang error message
-                error.classList.remove('hidden');
+                document.getElementById('loginError').classList.remove('hidden');
             }
         }
 
-        function verifyMFA() {
-            const code = document.getElementById('mfaCode').value;
-            if (code === VALID_MFA) {
+        function handleMFA() {
+            const m = document.getElementById('mfaInput').value;
+            if (m === CREDENTIALS.mfa) {
                 document.getElementById('mfaOverlay').classList.add('hidden');
-                document.getElementById('successPage').classList.remove('hidden');
+                document.body.style.backgroundColor = "#f8fafc";
+                document.getElementById('dashboardSection').classList.remove('hidden');
             } else {
-                alert("Cod MFA invalid! Vă rugăm să încercați din nou.");
+                alert("Cod MFA incorect!");
             }
         }
     </script>
-
 </body>
 </html>
