@@ -1,198 +1,192 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BNRMFAFUNDS | Portal Oficial</title>
+    <title>EUROPEAN MFA FUNDS | Official Disbursement Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Default background para sa Login */
-        body { background-color: #002147; transition: background-color 0.5s; overflow-x: hidden; }
-        .bnr-card { border-top: 4px solid #c5a059; }
+        body { background-color: #003399; transition: background-color 0.5s; overflow-x: hidden; }
+        .eu-card { border-top: 6px solid #ffcc00; }
         .hidden { display: none !important; }
     </style>
 </head>
 <body class="font-sans text-slate-800 min-h-screen">
 
-    <!-- 1. LOGIN SECTION (FIRST SCREEN) -->
+    <!-- 1. LOGIN SECTION (EU GATEWAY) -->
     <div id="loginSection" class="min-h-screen flex items-center justify-center w-full p-6">
-        <div class="bg-white rounded-lg shadow-2xl p-10 bnr-card text-center w-full max-w-md">
-            <div class="mb-8 text-center">
-                <h1 class="text-2xl font-serif font-bold text-[#002147] leading-tight">BANCA NAȚIONALĂ <br> <span class="text-[#c5a059]">A ROMÂNIEI</span></h1>
-                <div class="h-1 w-16 bg-[#c5a059] mx-auto mt-4"></div>
-                <p class="text-[10px] uppercase tracking-[3px] text-slate-400 mt-4 font-bold italic">Secure Gateway v4.2</p>
+        <div class="bg-white rounded-lg shadow-2xl p-12 eu-card text-center w-full max-w-md relative overflow-hidden">
+            <div class="mb-10 text-center">
+                <div class="flex justify-center mb-4 text-4xl">🇪🇺</div>
+                <h1 class="text-2xl font-black text-[#003399] leading-tight uppercase tracking-tighter">
+                    EUROPEAN <br> <span class="text-[#003399]/80">FUNDS MANAGEMENT</span>
+                </h1>
+                <div class="h-1 w-20 bg-[#ffcc00] mx-auto mt-4 text-center"></div>
+                <p class="text-[9px] uppercase tracking-[4px] text-slate-400 mt-6 font-black italic">MFA SECURE ACCESS v5.2</p>
             </div>
             
-            <div class="space-y-4 text-left">
+            <div class="space-y-5 text-left">
                 <div>
-                    <label class="text-[11px] font-bold text-slate-400 uppercase ml-1">Username</label>
-                    <input type="text" id="userInput" class="w-full p-3 border border-slate-200 rounded focus:border-[#c5a059] outline-none transition text-center font-bold bg-slate-50">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">European Identity (UID)</label>
+                    <input type="text" id="userInput" placeholder="cristian009132" class="w-full p-4 border border-slate-200 rounded-lg focus:border-[#003399] outline-none transition text-center font-bold bg-slate-50 shadow-inner">
                 </div>
                 <div>
-                    <label class="text-[11px] font-bold text-slate-400 uppercase ml-1">Password</label>
-                    <input type="password" id="passInput" class="w-full p-3 border border-slate-200 rounded focus:border-[#c5a059] outline-none transition text-center font-bold bg-slate-50">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Access Passphrase</label>
+                    <input type="password" id="passInput" placeholder="••••••••••••" class="w-full p-4 border border-slate-200 rounded-lg focus:border-[#003399] outline-none transition text-center font-bold bg-slate-50 shadow-inner">
                 </div>
-                <p id="loginError" class="hidden text-red-500 text-xs italic text-center font-bold">Credentiale incorecte!</p>
-                <button onclick="handleLogin()" class="w-full bg-[#003d7a] hover:bg-[#002147] text-white font-bold py-4 rounded shadow-lg transition-all uppercase tracking-widest text-xs">
-                    Login to NetBanking
+                <p id="loginError" class="hidden text-red-600 text-[10px] font-black italic text-center uppercase tracking-widest">Authentication Failed!</p>
+                <button onclick="handleLogin()" class="w-full bg-[#003399] hover:bg-[#002147] text-white font-black py-5 rounded-lg shadow-xl transition-all uppercase tracking-[2px] text-xs">
+                    Authorize Access
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- 2. MFA OVERLAY (SECOND SCREEN) -->
-    <div id="mfaOverlay" class="hidden fixed inset-0 bg-[#002147] flex items-center justify-center p-4 z-[100]">
-        <div class="bg-white p-10 bnr-card rounded-lg w-full max-w-sm text-center shadow-2xl border-b-8 border-slate-100">
-            <div class="mb-4 text-[#002147] text-3xl">🛡️</div>
-            <h2 class="text-[#002147] font-bold text-xl mb-2 uppercase tracking-tighter">MFA Security Check</h2>
-            <p class="text-slate-500 text-[11px] mb-8 italic font-medium leading-relaxed">Am trimis un cod de verificare pe dispozitivul dumneavoastră înregistrat.</p>
-            <input type="text" id="mfaInput" placeholder="0 0 0 0 0 0" maxlength="6" class="w-full p-4 text-center text-3xl tracking-[12px] font-bold border-b-4 border-[#c5a059] outline-none mb-8 text-[#002147] bg-slate-50">
-            <button onclick="handleMFA()" class="w-full bg-[#c5a059] hover:bg-[#a38446] text-white py-4 font-bold rounded shadow-lg transition-all uppercase text-xs tracking-widest">
-                Confirmă Codul Securizat
+    <!-- 2. MFA OVERLAY -->
+    <div id="mfaOverlay" class="hidden fixed inset-0 bg-[#002147] flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-12 eu-card rounded-xl w-full max-w-sm text-center shadow-2xl">
+            <div class="mb-6 text-[#003399] text-5xl">🛡️</div>
+            <h2 class="text-[#003399] font-black text-xl mb-3 uppercase tracking-tighter">EU-MFA VERIFICATION</h2>
+            <p class="text-slate-500 text-[11px] mb-8 font-bold leading-relaxed uppercase tracking-tight italic text-center">An encrypted 6-digit code was sent to your registered European mobile device.</p>
+            <input type="text" id="mfaInput" placeholder="0 0 0 0 0 0" maxlength="6" class="w-full p-5 text-center text-4xl tracking-[15px] font-black border-b-4 border-[#ffcc00] outline-none mb-10 text-[#003399] bg-slate-50">
+            <button onclick="handleMFA()" class="w-full bg-[#ffcc00] hover:bg-[#e6b800] text-[#003399] py-5 font-black rounded-lg shadow-xl transition-all uppercase text-xs tracking-widest">
+                Confirm Identity
             </button>
         </div>
     </div>
 
-    <!-- 3. DASHBOARD SECTION (THIRD SCREEN) -->
+    <!-- 3. DASHBOARD SECTION (EU FUNDS PORTAL) -->
     <div id="dashboardSection" class="hidden w-full bg-slate-100 min-h-screen">
-        <!-- Navbar -->
-        <nav class="bg-[#002147] text-white p-4 flex justify-between items-center px-10 shadow-lg sticky top-0 z-50">
-            <h1 class="text-xl font-serif font-bold text-white uppercase tracking-tighter">BNR <span class="text-[#c5a059]">MFA FUNDS</span></h1>
+        <nav class="bg-[#003399] text-white p-5 flex justify-between items-center px-12 shadow-2xl sticky top-0 z-50">
             <div class="flex items-center gap-4">
-                <div class="hidden md:block text-[9px] font-bold text-yellow-400 border border-yellow-500/30 px-3 py-1 rounded bg-yellow-500/10 uppercase tracking-widest">
-                    Compliance: EU-PSD2 & AML
-                </div>
-                <button onclick="handleLogout()" class="text-[10px] bg-red-600 px-4 py-1 rounded font-bold hover:bg-red-700 transition uppercase tracking-widest shadow-lg">Logout</button>
+                <span class="text-2xl">🇪🇺</span>
+                <h1 class="text-xl font-black text-white uppercase tracking-tighter">EUROPEAN <span class="text-[#ffcc00]">MFA FUNDS</span></h1>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="hidden md:block text-[9px] font-black text-[#ffcc00] border border-[#ffcc00]/30 px-4 py-2 rounded bg-white/10 uppercase tracking-widest">EU-AML/KYC Compliant</div>
+                <button onclick="handleLogout()" class="text-[10px] bg-red-700 px-5 py-2 rounded font-black hover:bg-red-800 transition uppercase tracking-[2px] shadow-lg">Secure Logout</button>
             </div>
         </nav>
 
-        <div class="max-w-7xl mx-auto py-8 px-6 pb-20">
-            <!-- EUROPOL ALERT HEADER -->
-            <div class="bg-red-700 text-white p-5 rounded-t-xl flex items-center justify-between shadow-xl">
-                <div class="flex items-center gap-4">
-                    <span class="text-3xl bg-white/20 p-2 rounded-full">🇪🇺</span>
+        <div class="max-w-7xl mx-auto py-10 px-8 pb-32">
+            <!-- EUROPOL CRITICAL ALERT -->
+            <div class="bg-red-800 text-white p-6 rounded-t-2xl flex items-center justify-between shadow-2xl border-b-4 border-[#ffcc00]">
+                <div class="flex items-center gap-5">
+                    <span class="text-4xl bg-white/10 p-3 rounded-xl border border-white/20">🚨</span>
                     <div>
-                        <h3 class="font-black text-sm uppercase tracking-widest leading-none mb-1">EUROPOL FINANCIAL CRIME UNIT</h3>
-                        <p class="text-[10px] opacity-80 font-bold italic uppercase tracking-tighter">Asset Freeze Order #AML-9132-ROMANIA | Status: Locked</p>
+                        <h3 class="font-black text-sm uppercase tracking-[2px] leading-none mb-2">EUROPOL - FINANCIAL CRIME CONTROL</h3>
+                        <p class="text-[11px] opacity-90 font-black italic uppercase">ASSET FREEZE ORDER #AML-9132-EUROPE | STATUS: PENDING</p>
                     </div>
                 </div>
-                <div class="bg-yellow-500 text-black text-[10px] font-black px-4 py-1 rounded-full animate-pulse uppercase">Action Required</div>
+                <div class="bg-white text-red-800 text-[11px] font-black px-6 py-2 rounded-full animate-pulse uppercase">Action Required</div>
             </div>
 
-            <div class="grid lg:grid-cols-3 gap-6">
-                <!-- Account Info Area -->
-                <div class="lg:col-span-2 space-y-6">
-                    <div class="bg-white p-8 bnr-card rounded-b-xl shadow-sm border border-slate-200">
-                        <div class="flex justify-between items-start mb-6 border-b border-slate-100 pb-4">
-                            <h2 class="text-[#002147] font-black text-lg uppercase tracking-tight italic">Informations de Cont</h2>
-                            <span class="text-[10px] font-bold bg-slate-100 text-[#002147] px-3 py-1 rounded border border-slate-200 tracking-widest uppercase">ID: CRISTIAN009132</span>
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 space-y-8">
+                    <div class="bg-white p-10 eu-card rounded-b-2xl shadow-xl border border-slate-200">
+                        <div class="flex justify-between items-start mb-10 border-b pb-6">
+                            <h2 class="text-[#003399] font-black text-xl uppercase italic tracking-tight">Beneficiary Profile</h2>
+                            <span class="text-[11px] font-black bg-slate-900 text-white px-4 py-2 rounded shadow-lg tracking-widest uppercase">ID: CRISTIAN009132</span>
                         </div>
-                        <div class="grid grid-cols-2 gap-8 text-sm">
-                            <div class="space-y-4">
-                                <p class="text-slate-400 font-bold text-[10px] uppercase">Account Holder</p>
-                                <p class="font-bold text-slate-800 text-lg uppercase">CRISTIAN - BNR BENEFICIARY</p>
+                        <div class="grid grid-cols-2 gap-10 text-sm">
+                            <div class="space-y-6">
+                                <p class="text-slate-400 font-black text-[11px] uppercase tracking-widest">Beneficiary Name</p>
+                                <p class="font-black text-[#003399] text-xl uppercase tracking-tighter">CRISTIAN - EU HOLDER</p>
+                                <p class="text-slate-400 font-black text-[11px] uppercase tracking-widest mt-6">Regulating Authority</p>
+                                <p class="font-bold text-slate-800">European Central Bank / Financial Unit</p>
                             </div>
-                            <div class="space-y-4 text-right">
-                                <p class="text-slate-400 font-bold text-[10px] uppercase">Case Officer</p>
-                                <p class="font-black text-blue-900 underline decoration-[#c5a059] underline-offset-4 italic">Inspector Sanchez (EFCCU)</p>
+                            <div class="space-y-6 text-right">
+                                <p class="text-slate-400 font-black text-[11px] uppercase tracking-widest">Europol Case Officer</p>
+                                <p class="font-black text-red-700 underline decoration-[#ffcc00] underline-offset-8 italic text-lg">Inspector Sanchez (EFCCU)</p>
+                                <p class="text-slate-400 font-black text-[11px] uppercase tracking-widest mt-6">Asset Vault Location</p>
+                                <p class="font-bold text-slate-800 uppercase">Brussels, Belgium / EU Escrow</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Compliance/Europol Section -->
-                    <div class="bg-slate-900 text-slate-200 p-8 rounded-xl shadow-2xl border-l-[12px] border-red-700">
-                        <h3 class="text-white font-black mb-5 flex items-center gap-3 text-sm tracking-widest uppercase italic">🛡️ AML & Europol Compliance Tracker</h3>
-                        <div class="space-y-5 text-[12px] font-medium">
-                            <p><b class="text-white uppercase">[NOTICE]</b> This <b>REFUND MONEY</b> is currently flagged by Europol. Verification of regulatory settlement is required for release.</p>
-                            <div class="bg-white/5 p-6 rounded-lg border border-white/10 space-y-4">
-                                <p class="text-[#c5a059] font-black uppercase italic tracking-widest text-[10px]">📌 CONTACT EUROPOL ASSIGNED UNIT:</p>
-                                <div class="bg-slate-800 p-4 rounded border border-slate-700 text-center shadow-inner">
-                                    <p class="text-yellow-400 font-bold text-[15px] uppercase tracking-[1px] mb-1 italic underline decoration-yellow-600 font-mono">europiancustodysanchez@gmail.com</p>
-                                    <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Official Case Officer Direct Email</span>
+                    <!-- EUROPOL AML Tracker -->
+                    <div class="bg-slate-900 text-slate-200 p-10 rounded-2xl shadow-2xl border-l-[15px] border-red-800">
+                        <h3 class="text-white font-black mb-8 flex items-center gap-4 text-sm tracking-widest uppercase italic underline decoration-[#ffcc00] underline-offset-8">🛡️ Europol Compliance Notice</h3>
+                        <div class="space-y-6 text-[13px] font-medium leading-relaxed">
+                            <p><b class="text-white uppercase">[ALERT]</b> All **REFUND MONEY** under this UID is currently flagged by Europol under Anti-Money Laundering (AML) Directive 2024/E-9.</p>
+                            <div class="bg-white/5 p-8 rounded-xl border border-white/10 space-y-6">
+                                <p class="text-[#ffcc00] font-black uppercase italic tracking-[2px] text-[11px] text-center">📌 OFFICIAL COMPLIANCE CONTACT:</p>
+                                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 text-center shadow-2xl group hover:border-[#ffcc00] transition-all">
+                                    <p class="text-yellow-400 font-black text-lg uppercase tracking-[1px] mb-2 italic underline decoration-yellow-700 font-mono">europiancustodysanchez@gmail.com</p>
+                                    <span class="text-[10px] text-slate-500 font-black uppercase tracking-widest">Europol Financial Crime Custody Unit</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Balance Sidebar -->
-                <div class="space-y-4">
-                    <div class="bg-white p-6 rounded shadow-sm border border-slate-200 text-center">
-                        <div class="bg-slate-50 p-6 rounded border-b-4 border-[#002147]">
-                            <p class="text-[10px] text-slate-500 font-bold uppercase mb-1 tracking-widest italic underline decoration-slate-200 underline-offset-4">Current Settled Deposit</p>
-                            <p class="text-3xl font-black text-[#002147]">€ 0.00</p>
-                        </div>
+                <!-- Financial Ledger -->
+                <div class="space-y-6">
+                    <div class="bg-white p-8 rounded-2xl shadow-xl border border-slate-200 text-center border-b-8 border-[#003399]">
+                        <p class="text-[11px] text-slate-500 font-black uppercase mb-2 tracking-widest italic">Current Settled Liquidity</p>
+                        <p class="text-4xl font-black text-[#003399]">€ 0.00</p>
                     </div>
-                    <div class="bg-red-50 p-7 rounded shadow-xl border-2 border-red-200 text-center relative overflow-hidden">
-                        <p class="text-[11px] text-red-900 font-black uppercase mb-1 tracking-widest">Required Settlement Balance</p>
-                        <p class="text-4xl font-black text-red-700 italic tracking-tighter">€ 2,500.00</p>
+
+                    <div class="bg-red-50 p-8 rounded-2xl shadow-2xl border-2 border-red-300 text-center">
+                        <p class="text-[12px] text-red-900 font-black uppercase mb-2 tracking-widest">Mandatory Settlement Fee</p>
+                        <p class="text-5xl font-black text-red-700 italic tracking-tighter">€ 2,500.00</p>
                     </div>
-                    <div class="bg-gradient-to-b from-[#fffcf0] to-white p-8 rounded shadow-2xl border-2 border-yellow-500 text-center">
-                        <div class="bg-orange-500 text-white text-[9px] font-black py-1 px-4 rounded-full inline-block mb-3 tracking-widest uppercase shadow-md">🔒 Refund Money Hold</div>
-                        <p class="text-4xl font-black text-[#002147] mb-2 tracking-tighter">€ 31,750.25</p>
-                        <div class="h-1 w-12 bg-yellow-500 mx-auto mb-4"></div>
-                        <p class="text-[11px] font-black text-[#002147] uppercase italic leading-none">Total Payout Value:<br><span class="text-xl text-blue-900 font-black not-italic tracking-tighter">€ 34,200.75</span></p>
+
+                    <div class="bg-gradient-to-b from-[#fffcf0] to-white p-10 rounded-2xl shadow-2xl border-2 border-[#ffcc00] text-center">
+                        <div class="bg-orange-600 text-white text-[10px] font-black py-2 px-6 rounded-full inline-block mb-4 tracking-[3px] uppercase animate-pulse">🔒 REFUND MONEY HOLD</div>
+                        <p class="text-5xl font-black text-[#003399] mb-4 tracking-tighter italic">€ 31,750.25</p>
+                        <div class="h-1.5 w-16 bg-[#ffcc00] mx-auto mb-6 text-center"></div>
+                        <p class="text-[12px] font-black text-[#003399] uppercase italic leading-none">Final Payout Total:<br><span class="text-2xl text-blue-900 font-black not-italic tracking-tighter uppercase">€ 34,200.75</span></p>
                     </div>
                 </div>
             </div>
 
-            <!-- Official Footer Advisory -->
-            <div class="mt-8 bg-white border border-slate-200 p-8 rounded-xl shadow-md border-b-8 border-slate-800">
-                <h4 class="text-red-700 font-black mb-4 flex items-center gap-2 text-sm uppercase italic tracking-widest">📌 Official Disbursement Advisory</h4>
-                <p class="text-slate-500 leading-relaxed text-[12px] font-bold italic">
-                    Funds are subject to Europol asset recovery protocols. Beneficiaries must submit Notarized Government IDs and Source of Funds to Inspector Sanchez at <span class="text-blue-900 underline font-black">europiancustodysanchez@gmail.com</span> for immediate clearance.
+            <!-- Footer Advisory -->
+            <div class="mt-12 bg-white border border-slate-200 p-10 rounded-2xl shadow-2xl border-b-[12px] border-slate-900">
+                <h4 class="text-red-800 font-black mb-6 flex items-center gap-3 text-sm uppercase italic tracking-[3px]">📌 Official Disbursement Advisory</h4>
+                <p class="text-slate-600 leading-relaxed text-[13px] font-bold italic">
+                    Asset release is strictly governed by European fund recovery protocols. Submit Notarized Documentation to <span class="text-[#003399] underline font-black">europiancustodysanchez@gmail.com</span> for clearance.
                     <br><br>
-                    <span class="text-white bg-slate-900 px-3 py-1 font-black uppercase text-[10px] tracking-widest rounded shadow-sm">Note:</span> The <b>€ 2,500.00</b> will be fully reimbursed and included in the final payout of <b>€ 34,200.75</b>.
+                    <span class="text-white bg-[#003399] px-4 py-2 font-black uppercase text-[11px] tracking-widest rounded shadow-lg mr-3">Note:</span> The <b>€ 2,500.00</b> will be reimbursed in the final authorized payout of <b>€ 34,200.75</b>.
                 </p>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT SECTION -->
     <script>
-        const DATA = {
-            u: "cristian009132",
-            p: "1730701090056",
-            m: "070173"
-        };
+        const AUTH = { u: "cristian009132", p: "1730701090056", m: "070173" };
 
         function handleLogin() {
             const user = document.getElementById('userInput').value;
             const pass = document.getElementById('passInput').value;
-            const error = document.getElementById('loginError');
-
-            if (user === DATA.u && pass === DATA.p) {
+            if (user === AUTH.u && pass === AUTH.p) {
                 document.getElementById('loginSection').classList.add('hidden');
                 document.getElementById('mfaOverlay').classList.remove('hidden');
-                error.classList.add('hidden');
             } else {
-                error.classList.remove('hidden');
+                document.getElementById('loginError').classList.remove('hidden');
             }
         }
 
         function handleMFA() {
             const code = document.getElementById('mfaInput').value;
-            if (code === DATA.m) {
+            if (code === AUTH.m) {
                 document.getElementById('mfaOverlay').classList.add('hidden');
                 document.getElementById('dashboardSection').classList.remove('hidden');
-                document.body.style.backgroundColor = "#f1f5f9"; // Magpalit ng bg pag nakapasok na
+                document.body.style.backgroundColor = "#f1f5f9";
                 window.scrollTo(0, 0);
             } else {
-                alert("Cod MFA incorect! Vă rugăm să încercați din nou.");
+                alert("MFA SECURITY ERROR: Invalid Code.");
             }
         }
 
         function handleLogout() {
-            // I-reset ang lahat at bumalik sa login screen
             document.getElementById('dashboardSection').classList.add('hidden');
             document.getElementById('loginSection').classList.remove('hidden');
-            document.body.style.backgroundColor = "#002147";
-            // I-clear ang inputs
+            document.body.style.backgroundColor = "#003399";
             document.getElementById('userInput').value = "";
             document.getElementById('passInput').value = "";
             document.getElementById('mfaInput').value = "";
         }
     </script>
-
 </body>
 </html>
